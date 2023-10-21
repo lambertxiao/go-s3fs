@@ -189,6 +189,8 @@ WantedBy=multi-user.target
 
 待补充
 
+![](./docs/img/stats.png)
+
 ## 自带pprof
 
 go-s3fs启动时，会在8899端口监听pprof，方便问题定位
