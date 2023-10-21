@@ -2,7 +2,7 @@ export GO111MODULE=on
 
 all:
 GO := go
-PKG := github.com/lambertxiao/go-s3fs/pkg/vars
+PKG := github.com/lambertxiao/go-s3fs/pkg/types
 GO_S3FS_VERSION := $(shell git describe --tags --abbrev=0)
 COMMIT_ID := $(shell git rev-parse --short HEAD)
 GO_VERSION := $(shell $(GO) version|sed 's/go version[[:blank:]]//g')
@@ -19,10 +19,10 @@ env:
 	$(warning $(ENV))
 
 linux: env
-	cd cmd && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -v -x -ldflags "${LDFLAGS}" -o ../../go-s3fs.linux
+	cd cmd && CGO_ENABLED=0 GOOS=linux GOARCH=amd64 $(GO) build -v -x -ldflags "${LDFLAGS}" -o ../go-s3fs.linux
 
 macos:  env
-	cd cmd && CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GO) build -v -x -ldflags "${LDFLAGS}" -o ../../go-s3fs.macos
+	cd cmd && CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 $(GO) build -v -x -ldflags "${LDFLAGS}" -o ../go-s3fs.macos
 
 clean:
 	rm -rf go-s3fs go-s3fs.exe

@@ -84,54 +84,60 @@ go-s3fs的日志默认会输出到系统日志里，如果想要设置日志级�
 通过`go-s3fs -h`查看go-s3fs支持的参数
 
 ```
-go-s3fs - a single posix file system based on S3
-USAGE
-  go-s3fs [global options] bucket mountpoint
-Version
-  GO_S3FS Version:
-  Commit ID:
-  Build:
-  Go Version:
+NAME:
+   go-s3fs - go-s3fs [global options] <bucket> <mountpoint>
 
-FUSE
-  -o value                      Specify fuse/winfsp option
-  --entry_timeout value         How long to cache dentry for inode for fuse. (default: 5m0s)
-  --attr_timeout value          How long to cache inode attr for fuse (default: 5m0s)
-  --disable_async_read          Disable all read (even read-ahead) operations asynchronously
-  --max_background value        Specify the max_background parameter of fuse kernel(>=7.13), currently fuse usespace supports up to 1024 (default: 64)
-  --congestion_threshold value  Specify the congestion_threshold parameter of fuse kernel(>=7.13), currently fuse usespace supports up to 768 (default: 48)
-  --async_dio                   Enable the async_dio parameter of fuse kernel, async_dio is disabled by default
-  --keep_pagecache              Turn on pagecache, when the file is opened, it will be decided whether to update according to the modification time of the inode, so please pay attention to the attr_timeout and dcache_timeout parameters will have a certain impact on this
+USAGE:
+    [global options] command [command options] [arguments...]
 
-OS
-  --dcache_timeout value       How long to cache dentry for go-s3fs (default: 5m0s)
-  --retry value                Number of times to retry a failed I/O (default: 5)
-  --parallel value             Number of parallel I/O thread (default: 32)
-  --disable_remove             Disable remove op, such as unlink, rmdir, rename
-  --debug                      Set debug level for fuse/winfsp
-  --level value                Set log level: error/warn/info/debug (default: "info")
-  --log_dir value              Set log dir
-  --log_max_age value          Set log max age (default: 72h0m0s)
-  --log_rotation_time value    Set log rotation time (default: 1h0m0s)
-  --enable_load_dentries       enable auto init dentries in memory
-  --read_after_write_finish    read operation will wait all write operation done
-  --finish_write_when_release  all written data will be uploaded when release
-  --readahead value            Readahead size. e.g.: 1m/1k/1  (default: "0")
-  --max_cache_per_file value   Max cache per file when enable readahead. e.g.: 32m/64m/128m  (default: "1024m")
-  --etag value                 Check etag for part. value is percent(0~100) (default: 50)
-  --passwd value               specify access file (default: "/etc/go-s3fs/go-s3fs.yaml")
-  --uid value                  Specify default uid (default: 0)
-  --gid value                  Specify default gid (default: 0)
-  --mp_mask value              Specify mountpoint mask (default: 0)
-  --disable_check_vdir         disable detection of virtual directories
-  --prefix value               Specify bucket prefix path
-  --direct_read                Enable cache bypass read
-  --skip_ne_dir_lookup         Skip non-essential directory checking, such as files ending in ".log",".png",".jpg", etc.
-  --storage_class value        Storage type, including "STANDARD", "IA" (default: "STANDARD")
+VERSION:
+   S3FS Version: v1.0.0
+  Commit ID: 73f2891
+  Build: 2023-10-22:01:19:35
+  Go Version: go1.21.0 darwin/arm64
 
-MISC
-  --help, -h  show help
-  -f          foreground
+COMMANDS:
+   stats    show stats
+   reload   reload configuration
+   gc       execute golang rumtime.GC()
+   help, h  Shows a list of commands or help for one command
+
+GLOBAL OPTIONS:
+   --help, -h                    show help
+   -f                            foreground
+   --dcache_timeout value        How long to cache dentry for go-s3fs (default: 5m0s)
+   --retry value                 Number of times to retry a failed I/O (default: 5)
+   --parallel value              Number of parallel I/O thread (default: 32)
+   --disable_remove              Disable remove op, such as unlink, rmdir, rename
+   --debug                       Set debug level for fuse/winfsp
+   --level value                 Set log level: error/warn/info/debug (default: "info")
+   --log_dir value               Set log dir
+   --log_max_age value           Set log max age (default: 72h0m0s)
+   --log_rotation_time value     Set log rotation time (default: 1h0m0s)
+   --enable_load_dentries        enable auto init dentries in memory
+   --read_after_write_finish     read operation will wait all write operation done
+   --finish_write_when_release   all written data will be uploaded when release
+   --readahead value             Readahead size. e.g.: 1m/1k/1  (default: "0")
+   --max_cache_per_file value    Max cache per file when enable readahead. e.g.: 32m/64m/128m  (default: "1024m")
+   --etag value                  Check etag for part. value is percent(0~100) (default: 50)
+   --passwd value                specify access file (default: "/etc/go-s3fs/go-s3fs.yaml")
+   -o value                      Specify fuse/winfsp option
+   --uid value                   Specify default uid (default: 0)
+   --gid value                   Specify default gid (default: 0)
+   --mp_mask value               Specify mountpoint mask (default: 0)
+   --disable_check_vdir          disable detection of virtual directories
+   --prefix value                Specify bucket prefix path
+   --direct_read                 Enable cache bypass read
+   --skip_ne_dir_lookup          Skip non-essential directory checking, such as files ending in ".log",".png",".jpg", etc.
+   --storage_class value         Storage type, including "STANDARD", "IA" (default: "STANDARD")
+   --entry_timeout value         How long to cache dentry for inode for fuse. (default: 5m0s)
+   --attr_timeout value          How long to cache inode attr for fuse (default: 5m0s)
+   --disable_async_read          Disable all read (even read-ahead) operations asynchronously
+   --max_background value        Specify the max_background parameter of fuse kernel(>=7.13), currently fuse usespace supports up to 1024 (default: 64)
+   --congestion_threshold value  Specify the congestion_threshold parameter of fuse kernel(>=7.13), currently fuse usespace supports up to 768 (default: 48)
+   --async_dio                   Enable the async_dio parameter of fuse kernel, async_dio is disabled by default
+   --keep_pagecache              Turn on pagecache, when the file is opened, it will be decided whether to update according to the modification time of the inode, so please pay attention to the attr_timeout and dcache_timeout parameters will have a certain impact on this
+   --version, -v                 print the version
 ```
 
 ## 设置fuse层参数

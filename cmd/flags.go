@@ -89,7 +89,7 @@ func VersionPointer(c *cli.Context) {
 }
 
 func NewApp() *cli.App {
-	version := "GO_S3FS Version: " + types.GO_S3FS_VERSION + "\n" +
+	version := "S3FS Version: " + types.GO_S3FS_VERSION + "\n" +
 		"  Commit ID: " + types.COMMIT_ID + "\n" +
 		"  Build: " + types.BUILD_TIME + "\n" +
 		"  Go Version: " + types.GO_VERSION + "\n"
