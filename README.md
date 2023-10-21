@@ -30,7 +30,6 @@ go-s3fs基于用户态fuse实现，您的机器需要支持fuse，且fuse版本�
 编辑 /etc/go-s3fs/go-s3fs.yaml 并增加如下信息(如果没有该目录需要自行创建):
 
 ```
-bucket: <your bucket name>
 access_key: ************************************
 secret_key: ************************************
 endpoint: <s3 endpoint, like: s3-us-west-2.amazonaws.com>
@@ -38,7 +37,6 @@ endpoint: <s3 endpoint, like: s3-us-west-2.amazonaws.com>
 
 *冒号后有单个空格*
 
-* **bucket**: 桶名，需要和挂载的桶名一致
 * **access_key**: 公钥，支持token秘钥和api秘钥两种模式
 * **secret_key**: 私钥，支持token秘钥和api秘钥两种模式
 * **endpoint**: s3的访问域名
