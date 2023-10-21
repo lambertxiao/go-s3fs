@@ -1,0 +1,13 @@
+go-s3fs.linux
+go-s3fs.macos
+.DS_Store
+local.conf
+logs
+vendor
+mnt*
+dev.conf
+go-s3fs.yaml
+temp
+extra_testcase
+.vscode
+mocks
