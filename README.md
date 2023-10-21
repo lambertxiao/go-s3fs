@@ -187,8 +187,6 @@ WantedBy=multi-user.target
 
 ## 查看监控
 
-待补充
-
 ![](./docs/img/stats.png)
 
 ## 自带pprof
