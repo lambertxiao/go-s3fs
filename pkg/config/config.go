@@ -24,13 +24,11 @@ type FSConfig struct {
 	Foreground    bool
 
 	// fuse
-	Entry_ttl            time.Duration
-	Attr_ttl             time.Duration
-	Disable_async_read   bool
-	Writeback            bool
-	Max_background       uint16
-	Congestion_threshold uint16
-	Async_dio            bool
+	Entry_ttl          time.Duration
+	Attr_ttl           time.Duration
+	Disable_async_read bool
+	Writeback          bool
+	Async_dio          bool
 	// fuse -o
 	Allow_other bool
 
