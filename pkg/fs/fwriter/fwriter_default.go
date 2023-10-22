@@ -267,7 +267,7 @@ func (w *DefaultWriter) FlushPart() (bool, error) {
 }
 
 func (w *DefaultWriter) Flush() error {
-	if config.GetGConfig().WriteFinishWhenRelease {
+	if config.GetGConfig().EnableAsyncFlush {
 		return nil
 	}
 
@@ -317,7 +317,7 @@ func (w *DefaultWriter) Release() error {
 	w.Lock()
 	defer w.Unlock()
 
-	if config.GetGConfig().WriteFinishWhenRelease {
+	if config.GetGConfig().EnableAsyncFlush {
 		err := w.finishWrite()
 		if err != nil {
 			return err

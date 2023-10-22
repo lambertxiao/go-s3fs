@@ -279,7 +279,7 @@ func (fs *FSR) rename(ctx context.Context, op *RenameOp) error {
 		return types.EPERM
 	}
 
-	if config.GetGConfig().ReadAfterWriteFinish {
+	if config.GetGConfig().EnableAsyncFlush {
 		srcDentry, err := fs.meta.FindDentry(op.OldParent, op.OldName, false)
 		if err != nil || srcDentry == nil {
 			return types.ENOENT

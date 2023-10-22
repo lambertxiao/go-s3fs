@@ -80,13 +80,11 @@ type FSConfig struct {
 	// 由于部分writer是在release的时候才结束写入，而release本身是异步的
 	// 所以存在刚写入的文件马上来读会读取不到文件内容，因为此时写入可能还未结束
 	// 针对这种场景，给定一个可选的功能，可以让读端等待写入全部结束后才开始读
-	ReadAfterWriteFinish bool
-
 	// 由于一个文件的fd可以被dup多个，如果有某个dup出来的fd被close了，fuse会发起flush请求，
 	// 这种情况下不应该在flush的时候去结束整个写入流程，因为其余的fd还可能继续写入数据。
 	// 由于s3服务端目前不支持追加写入，因此针对这种场景，给定一个可选的功能，在release时结束写入整个写入流程。
 	// 并配合ReadAfterWriteFinish参数保证在写入后马上读，能读到正确的内容
-	WriteFinishWhenRelease bool
+	EnableAsyncFlush bool
 }
 
 var (
@@ -131,23 +129,22 @@ type BucketConfig struct {
 	Async_dio            bool     `yaml:"async_dio"`
 	Skip_ne_dir_lookup   bool     `yaml:"skip_ne_dir_lookup"`
 	//////////////////////////////////////////////////////
-	Writeback              bool   `yaml:"writeback"`
-	Enable_direct_read     bool   `yaml:"direct_read"`
-	Disable_async_read     bool   `yaml:"disable_async_read"`
-	DebugFuse              bool   `yaml:"debug"`
-	Enable_md5             bool   `yaml:"enable_md5"`
-	LogMaxAge              string `yaml:"log_max_age"`
-	LogRotationTime        string `yaml:"log_rotation_time"`
-	Uid                    uint32 `yaml:"uid"`
-	Gid                    uint32 `yaml:"gid"`
-	MpMask                 uint32 `yaml:"mp_mask"`
-	Prefix                 string `yaml:"prefix"`
-	Etag                   int    `yaml:"etag"`
-	Log_level              string `yaml:"level"`
-	Storage_class          string `yaml:"storage_class"`
-	Enable_load_dentries   bool   `yaml:"enable_load_dentries"`
-	ReadAfterWriteFinish   bool   `yaml:"read_after_write_finish"`
-	FinishWriteWhenRelease bool   `yaml:"finish_write_when_release"`
-	CacheDB                string `yaml:"cache_db"`
-	DisableRemove          bool   `yaml:"disable_remove"`
+	Writeback            bool   `yaml:"writeback"`
+	Enable_direct_read   bool   `yaml:"direct_read"`
+	Disable_async_read   bool   `yaml:"disable_async_read"`
+	DebugFuse            bool   `yaml:"debug"`
+	Enable_md5           bool   `yaml:"enable_md5"`
+	LogMaxAge            string `yaml:"log_max_age"`
+	LogRotationTime      string `yaml:"log_rotation_time"`
+	Uid                  uint32 `yaml:"uid"`
+	Gid                  uint32 `yaml:"gid"`
+	MpMask               uint32 `yaml:"mp_mask"`
+	Prefix               string `yaml:"prefix"`
+	Etag                 int    `yaml:"etag"`
+	Log_level            string `yaml:"level"`
+	Storage_class        string `yaml:"storage_class"`
+	Enable_load_dentries bool   `yaml:"enable_load_dentries"`
+	EnableAsyncFlush     bool   `yaml:"enable_async_flush"`
+	CacheDB              string `yaml:"cache_db"`
+	DisableRemove        bool   `yaml:"disable_remove"`
 }

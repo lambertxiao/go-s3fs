@@ -44,40 +44,39 @@ func main() {
 
 const (
 	// flags
-	C_HELP                      = "help, h"
-	C_F                         = "f"
-	C_RETRY                     = "retry"
-	C_PARALLEL                  = "parallel"
-	C_LEVEL                     = "level"
-	C_DISABLE_REMOVE            = "disable_remove"
-	C_DEBUG                     = "debug"
-	C_READAHEAD                 = "readahead"
-	C_MAX_CACHE_PER_FILE        = "max_cache_per_file"
-	C_ETAG                      = "etag"
-	C_PASSWD                    = "passwd"
-	C_UID                       = "uid"
-	C_GID                       = "gid"
-	C_MP_MASK                   = "mp_mask"
-	C_DISABLE_CHECK_VDIR        = "disable_check_vdir"
-	C_PREFIX                    = "prefix"
-	C_ALLOW_OTHER               = "allow_other"
-	C_DIRECT_READ               = "direct_read"
-	C_SKIP_NE_DIR_LOOKUP        = "skip_ne_dir_lookup"
-	C_STORAGE_CLASS             = "storage_class"
-	C_LOG_DIR                   = "log_dir"
-	C_LOG_MAX_AGE               = "log_max_age"
-	C_LOG_ROTATION_TIME         = "log_rotation_time"
-	C_ENABLE_LOAD_DENTRIES      = "enable_load_dentries"
-	C_READ_AFTER_WRITE_FINISH   = "read_after_write_finish"
-	C_FINISH_WRITE_WHEN_RELEASE = "finish_write_when_release"
-	C_DCACHETIMEOUT             = "dcache_timeout"
-	C_O                         = "o"
-	C_ENTRYTIMEOUT              = "entry_timeout"
-	C_ATTRTIMEOUT               = "attr_timeout"
-	C_DISABLE_ASYNC_READ        = "disable_async_read"
-	C_ASYNC_DIO                 = "async_dio"
-	C_KEEP_PAGECACHE            = "keep_pagecache"
-	C_MOUNTPOINT                = "mp"
+	C_HELP                 = "help, h"
+	C_F                    = "f"
+	C_RETRY                = "retry"
+	C_PARALLEL             = "parallel"
+	C_LEVEL                = "level"
+	C_DISABLE_REMOVE       = "disable_remove"
+	C_DEBUG                = "debug"
+	C_READAHEAD            = "readahead"
+	C_MAX_CACHE_PER_FILE   = "max_cache_per_file"
+	C_ETAG                 = "etag"
+	C_PASSWD               = "passwd"
+	C_UID                  = "uid"
+	C_GID                  = "gid"
+	C_MP_MASK              = "mp_mask"
+	C_DISABLE_CHECK_VDIR   = "disable_check_vdir"
+	C_PREFIX               = "prefix"
+	C_ALLOW_OTHER          = "allow_other"
+	C_DIRECT_READ          = "direct_read"
+	C_SKIP_NE_DIR_LOOKUP   = "skip_ne_dir_lookup"
+	C_STORAGE_CLASS        = "storage_class"
+	C_LOG_DIR              = "log_dir"
+	C_LOG_MAX_AGE          = "log_max_age"
+	C_LOG_ROTATION_TIME    = "log_rotation_time"
+	C_ENABLE_LOAD_DENTRIES = "enable_load_dentries"
+	C_ASYNC_FLUSH          = "enable_async_flush"
+	C_DCACHETIMEOUT        = "dcache_timeout"
+	C_O                    = "o"
+	C_ENTRYTIMEOUT         = "entry_timeout"
+	C_ATTRTIMEOUT          = "attr_timeout"
+	C_DISABLE_ASYNC_READ   = "disable_async_read"
+	C_ASYNC_DIO            = "async_dio"
+	C_KEEP_PAGECACHE       = "keep_pagecache"
+	C_MOUNTPOINT           = "mp"
 )
 
 var allFlags map[string]string
@@ -97,8 +96,7 @@ func init() {
 		C_UID, C_GID, C_MP_MASK, C_DISABLE_CHECK_VDIR,
 		C_PREFIX, C_DIRECT_READ, C_SKIP_NE_DIR_LOOKUP, C_STORAGE_CLASS,
 		C_LOG_DIR, C_LOG_MAX_AGE, C_LOG_ROTATION_TIME, C_ENABLE_LOAD_DENTRIES,
-		C_READ_AFTER_WRITE_FINISH,
-		C_FINISH_WRITE_WHEN_RELEASE,
+		C_ASYNC_FLUSH,
 	} {
 		allFlags[v] = "os"
 	}
@@ -246,14 +244,9 @@ func NewApp() *cli.App {
 				Usage: "enable auto init dentries in memory",
 			},
 			cli.BoolFlag{
-				Name:  C_READ_AFTER_WRITE_FINISH,
-				Usage: "read operation will wait all write operation done",
-			},
-			cli.BoolFlag{
-				Name:  C_FINISH_WRITE_WHEN_RELEASE,
+				Name:  C_ASYNC_FLUSH,
 				Usage: "all written data will be uploaded when release",
 			},
-
 			cli.StringFlag{
 				Name:  C_READAHEAD,
 				Value: types.DEFAULT_READAHEAD,
@@ -394,9 +387,8 @@ func PopulateConfig(c *cli.Context) (*config.FSConfig, error) {
 		LogMaxAge:       c.Duration(C_LOG_MAX_AGE),
 		LogRotationTime: c.Duration(C_LOG_ROTATION_TIME),
 
-		Enable_load_dentries:   c.Bool(C_ENABLE_LOAD_DENTRIES),
-		ReadAfterWriteFinish:   c.Bool(C_READ_AFTER_WRITE_FINISH),
-		WriteFinishWhenRelease: c.Bool(C_FINISH_WRITE_WHEN_RELEASE),
+		Enable_load_dentries: c.Bool(C_ENABLE_LOAD_DENTRIES),
+		EnableAsyncFlush:     c.Bool(C_ASYNC_FLUSH),
 	}
 
 	cfg.StorageConfig = config.StorageConf{
@@ -605,11 +597,8 @@ func parseConfig(conf *config.FSConfig) (*config.BucketConfig, error) {
 	if conf.Enable_load_dentries || bucketConfig.Enable_load_dentries {
 		conf.Enable_load_dentries = true
 	}
-	if conf.ReadAfterWriteFinish || bucketConfig.ReadAfterWriteFinish {
-		conf.ReadAfterWriteFinish = true
-	}
-	if conf.WriteFinishWhenRelease || bucketConfig.FinishWriteWhenRelease {
-		conf.WriteFinishWhenRelease = true
+	if conf.EnableAsyncFlush || bucketConfig.EnableAsyncFlush {
+		conf.EnableAsyncFlush = true
 	}
 	if conf.DisableRemove || bucketConfig.DisableRemove {
 		conf.DisableRemove = true

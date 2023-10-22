@@ -174,7 +174,7 @@ func (fs *FSR) readFile(ctx context.Context, op *ReadFileOp) error {
 		fs.observeOP(FS_OP_READ, st)
 	}()
 
-	if config.GetGConfig().ReadAfterWriteFinish {
+	if config.GetGConfig().EnableAsyncFlush {
 		fs.mutex.Lock()
 		ofs := fs.ino2OpenFiles[op.Inode]
 		fs.mutex.Unlock()
