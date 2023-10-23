@@ -6,6 +6,10 @@ go-s3fs 是一个可在 linux/macos 中，将 S3 的 bucket 挂载到本地挂�
 
 go-s3fs基于用户态fuse实现，您的机器需要支持fuse，且fuse版本大于7.23。
 
+## 架构图
+
+![](./docs/img/struct.png)
+
 ## 下载链接
 
 见 release
@@ -171,7 +175,7 @@ User=<user>
 Group=<group>
 Restart=always
 RestartSec=10
-ExecStart=/bin/go-s3fs --passwd=/etc/go-s3fs/go-s3fs.yaml  <your_bucket> <mountpoint> 
+ExecStart=/bin/go-s3fs --passwd=/etc/go-s3fs/go-s3fs.yaml  <your_bucket> <mountpoint>
 ExecStop=/bin/umount <monutpoint>
 [Install]
 WantedBy=multi-user.target
