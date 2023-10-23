@@ -10,6 +10,22 @@ go-s3fs基于用户态fuse实现，您的机器需要支持fuse，且fuse版本�
 
 ![](./docs/img/struct.png)
 
+## 读写性能
+
+### 读写吞吐
+
+测试命令类似如下:
+
+```
+# 测试写吞吐
+fio -direct=1 -iodepth=8 -rw=write -ioengine=libaio -bs=1M -numjobs=8  -group_reporting -name=test -size=32g  -filename=/mnt/s3fs
+
+# 测试读吞吐
+fio -direct=1  -iodepth=8 -rw=read -ioengine=libaio -bs=1M -numjobs=4 -runtime=1000 -group_reporting -name=test -filename=/mnt/s3fs/bigfile
+```
+
+![](./docs/img/throughput.png)
+
 ## 下载链接
 
 见 release
