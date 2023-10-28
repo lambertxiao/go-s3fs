@@ -93,11 +93,12 @@ func (fs *FSR) fileOpen(ino types.InodeID, path string, forWrite bool) HandleID 
 		ino, dirent.Name, dirent.PIno, file, storage.GetStorageClass(dirent.Inode.StorageClass),
 	)
 
+	fs.mutex.Lock()
+	defer fs.mutex.Unlock()
+
 	if config.GetGConfig().Readahead == 0 {
 		of.reader = freader.NewDirectReader(file)
 	} else {
-		fs.mutex.Lock()
-
 		// 不存在fcache或者原本的fcache大小与现在不同，则创建一个新的fcache
 		if fs.fcacheMap[ino] == nil {
 			fs.fcacheMap[ino] = freader.InitFileCache(
@@ -114,25 +115,21 @@ func (fs *FSR) fileOpen(ino types.InodeID, path string, forWrite bool) HandleID 
 			fs.readCacheHitSizeHistogram,
 			&fs.objInflightReadCnt,
 		)
-		fs.mutex.Unlock()
-		// of.reader = freader.NewBufferReader(file, config.G_FSConfig.Readahead)
 	}
 
 	if forWrite {
 		of.writer = fwriter.NewDefaultWriter(path, &fs.objInflightWriteCnt)
 	}
 
-	fs.withLock(func() {
-		handleID := fs.nextFhID
-		fs.nextFhID++
-		of.hid = handleID
+	handleID := fs.nextFhID
+	fs.nextFhID++
+	of.hid = handleID
 
-		fs.openFiles[handleID] = of
-		if fs.ino2OpenFiles[ino] == nil {
-			fs.ino2OpenFiles[ino] = map[HandleID]*OpenFile{}
-		}
-		fs.ino2OpenFiles[ino][handleID] = of
-	})
+	fs.openFiles[handleID] = of
+	if fs.ino2OpenFiles[ino] == nil {
+		fs.ino2OpenFiles[ino] = map[HandleID]*OpenFile{}
+	}
+	fs.ino2OpenFiles[ino][handleID] = of
 
 	logg.Dlog.Infof("openFile ino:%d handle:%d forwrite:%t fpath:%s fsize:%d", ino, of.hid, forWrite, file.Path, file.Size)
 	return of.hid
