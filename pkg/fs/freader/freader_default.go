@@ -358,6 +358,8 @@ func (r *DefaultReader) loadPageData(group *FilePageGroup) error {
 			logg.Dlog.Error(err)
 		}
 
+		reply.Body.Close()
+
 		if expectReadLen != realReadLen {
 			err = fmt.Errorf("missing read len, expected %d, got %d", expectReadLen, realReadLen)
 			logg.Dlog.Error(err)
